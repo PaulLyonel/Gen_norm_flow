@@ -184,7 +184,7 @@ def train_and_eval(a, b, testing_ys, forward_model):
             hist_ff_sum+=hist_ff
 
 
-        # save histograms
+        # save histograms: https://github.com/jlwu002/BCL
         make_image(true_posterior_samples,samples1, 'SNF_img'+str(i),'scatterometry_images')
         make_image(true_posterior_samples,samples2, 'INN_img'+str(i),'scatterometry_images')
         make_image(true_posterior_samples,samples3, 'VAE_MALA_img'+str(i),'scatterometry_images')
@@ -233,7 +233,7 @@ def train_and_eval(a, b, testing_ys, forward_model):
 
         toc=time.time()-tic
         print('Iteration: {} of {}, Time: {:.3f}, Time left (estimated): {:.3f}'.format(i+1,testing_num_y,toc,toc/(i+1)*(testing_num_y-i-1)))
-        print('KL_SNF: {:.3f}, KL_INN {:.3f},, KL_VAE_MALA {:.3f}, KL_VAE {:.3f}, KL_FF{:.3f}'.format(kl1,kl2,kl3,kl4,kl5))
+        print('KL_INN_MALA: {:.3f}, KL_INN {:.3f},, KL_VAE_MALA {:.3f}, KL_VAE {:.3f}, KL_FF{:.3f}'.format(kl1,kl2,kl3,kl4,kl5))
     kl1_vals=np.array(kl1_vals)
     kl2_vals=np.array(kl2_vals)
     kl3_vals = np.array(kl3_vals)
@@ -246,11 +246,11 @@ def train_and_eval(a, b, testing_ys, forward_model):
     kl4_var=np.sum((kl4_vals-kl4_sum/testing_num_y)**2)/testing_num_y
     kl5_var=np.sum((kl5_vals-kl5_sum/testing_num_y)**2)/testing_num_y
 
-    print('KL1:', kl1_sum / testing_num_y,'+-',kl1_var)
-    print('KL2:', kl2_sum / testing_num_y,'+-',kl2_var)
-    print('KL3:', kl3_sum / testing_num_y,'+-',kl3_var)
-    print('KL4:', kl4_sum / testing_num_y,'+-',kl4_var)
-    print('KL5:', kl5_sum / testing_num_y,'+-',kl5_var)
+    print('KL INN MALA:', kl1_sum / testing_num_y,'+-',kl1_var)
+    print('KL INN:', kl2_sum / testing_num_y,'+-',kl2_var)
+    print('KL VAE MALA:', kl3_sum / testing_num_y,'+-',kl3_var)
+    print('KL VAE:', kl4_sum / testing_num_y,'+-',kl4_var)
+    print('KL FULLFLOW:', kl5_sum / testing_num_y,'+-',kl5_var)
 
     return np.array((kl1_sum / testing_num_y, kl2_sum/testing_num_y, kl3_sum / testing_num_y, kl4_sum/testing_num_y,kl5_sum / testing_num_y))
 

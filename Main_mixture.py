@@ -214,7 +214,7 @@ def train_and_eval(mixture_params, b, convex_comb_factor, testing_ys, forward_ma
 
         toc=time.time()-tic
         print('Iteration: {} of {}, Time: {:.3f}, Time left (estimated): {:.3f}'.format(i+1,testing_num_y,toc,toc/(i+1)*(testing_num_y-i-1)))
-        print('W_SNF: {:.3f},W_VAE_MALA: {:.3f},W_INN_MALA: {:.3f}, W_VAE_INN: {:.3f},W_VAE: {:.3f}, W_INN: {:.3f}, W_ff: {:.3f}'.format(w1[-1],w2[-1], w3[-1],w4[-1],w5[-1],w6[-1],w7[-1]))
+        print('W_INN_VAE_MALA: {:.3f},W_VAE_MALA: {:.3f},W_INN_MALA: {:.3f}, W_VAE_INN: {:.3f},W_VAE: {:.3f}, W_INN: {:.3f}, W_ff: {:.3f}'.format(w1[-1],w2[-1], w3[-1],w4[-1],w5[-1],w6[-1],w7[-1]))
     w1_mean=w1_sum / testing_num_y
     w2_mean=w2_sum / testing_num_y
     w3_mean=w3_sum / testing_num_y
@@ -231,9 +231,9 @@ def train_and_eval(mixture_params, b, convex_comb_factor, testing_ys, forward_ma
     w6_std=np.std(w6)
     w7_std=np.std(w7)
 
-    print('W SNF:', w1_mean,'+-',w1_std)
+    print('W INN_VAE_MALA:', w1_mean,'+-',w1_std)
     print('W VAE_MALA:', w2_mean,'+-',w2_std)
-    print('W_MALA:', w3_mean,'+-',w3_std)
+    print('W INN_MALA:', w3_mean,'+-',w3_std)
     print('W INN_VAE:', w4_mean,'+-',w4_std)
     print('W VAE:', w5_mean,'+-',w5_std)
 

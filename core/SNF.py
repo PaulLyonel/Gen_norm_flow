@@ -50,7 +50,6 @@ def create_INN_VAE_MALA(num_layers, sub_net_size,log_posterior,metr_steps_per_bl
     snf=SNF()
     for k in range(num_layers):
         lambd = (k+1)/num_layers
-        #lambd = 1.
         snf.add_layer(deterministic_layer(num_inn_layers,sub_net_size,dimension_condition=dimension_condition,dimension=dimension))
         snf.add_layer(learned_stochastic_layer(forward_constructor = lambda: subnet_fc(dimension+dimension_condition, dimension, sub_net_size = sub_net_size),
                                                backward_constructor = lambda: subnet_fc(dimension+dimension_condition, dimension, sub_net_size = sub_net_size), noise_level = 1e-1))
@@ -287,26 +286,9 @@ def get_interpolated_energy_fun(ys,lambd,get_log_posterior):
         return lambd*(get_log_posterior(x, ys)).view(len(x))+(1-lambd)*0.5*torch.sum(x**2, dim = 1)
     return energy
 
-def get_interpolated_energy_fun2(ys,lambd,get_log_posterior):
-    if lambd==0.:
-        def energy(x):
-            return 0.5*torch.sum(x**2, dim = 1)
-        return energy
-    if lambd==1.:
-        def energy(x):
-            return get_log_posterior(x, ys)
-        return energy
-    def energy(x):
-        z = (1-lambd)*torch.randn(100, x.shape[1], device = device)
-        integral = torch.zeros(x.shape[0], device = device)
-        for k in range(len(x)):
-            integral[k] += torch.mean(get_log_posterior((x[k].view(1,x.shape[1])+z)/lambd, ys[k].view(1,100).repeat(100,1)))
-        return integral
-    return energy
-
 # gradients of energy for langevin methods
 
-def force(x, energy):
+def energy_grad(x, energy):
     x = x.requires_grad_(True)
     e = energy(x)
     return torch.autograd.grad(e.sum(), x,retain_graph=True)[0],e
@@ -318,16 +300,16 @@ def anneal_to_energy(x_curr, energy,metr_steps_per_block,noise_std=0.1, langevin
     e0 = energy(x_curr)
     for i in range(metr_steps_per_block):
         if langevin_prop == True:
-            x_prop, dw,e_curr,e_prop = langevin_step(x_curr, stepsize, energy, lang_steps)
-            e_diff = torch.exp(-e_prop+e_curr+dw)
+            x_prop, work_diff,e_curr,e_prop = langevin_step(x_curr, stepsize, energy, lang_steps)
+            prob_diff = torch.exp(-e_prop+e_curr+work_diff)
         else:
             noise = noise_std * torch.randn_like(x_curr, device = device)
             x_prop = x_curr + noise
             e_prop=energy(x_prop)
             e_curr=energy(x_curr)
-            e_diff = torch.exp(-e_prop+e_curr)
-        r = torch.rand_like(e_diff, device = device)
-        acc = (r < e_diff).float().view(len(x_prop),1)
+            prob_diff = torch.exp(-e_prop+e_curr)
+        r = torch.rand_like(prob_diff, device = device)
+        acc = (r < prob_diff).float().view(len(x_prop),1)
         rej = 1. - acc
         rej = rej.view(len(rej),1)
         x_curr = rej * x_curr + acc * x_prop
@@ -344,12 +326,12 @@ def langevin_step(x, stepsize, energy, lang_steps,damp_beta=1.):
             # forward noise
             eta = torch.randn_like(x, device = device)
             # forward step
-            grad_x,e_x=force(x,energy)
+            grad_x,e_x=energy_grad(x,energy)
             if i==0:
                 energy_x=e_x
             y = x - stepsize * grad_x + np.sqrt(2*stepsize/beta) * eta
             # backward noise
-            grad_y,energy_y=force(y, energy)
+            grad_y,energy_y=energy_grad(y, energy)
             eta_ = (x - y + stepsize* grad_y) / np.sqrt(2*stepsize/beta)
             # noise ratio
             logdet += 0.5 * (eta**2 - eta_**2).sum(axis=1, keepdims=True)
