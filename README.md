@@ -11,8 +11,6 @@ MCMC methods (MALA, Gaussian proposal),
 Langevin methods and VAE layers. We optimize
 them via a unified loss function, which acts on the paths of a forward and backward process.
 
-Parts of the code  (MCMC and Langevin) are adapted from the works Stochastic normalizing flow [5] (see also https://github.com/noegroup/bgflow for their implementations of SNFs and many other models).
-
 The forward model for the scatterometry example (Section 7.2 in [1] and script Main_scatterometry.py) 
 was kindly provided by Sebastian Heidenreich from PTB (Physikalisch-Technische Bundesanstalt). 
 For more information on this particular inverse problem, we refer the reader to the papers [3] and [4]. 
@@ -36,7 +34,3 @@ International Journal for Uncertainty Quantification, 5(6), 2015.
 [4] S. Heidenreich, H. Gross, and M. Bär.  
 Bayesian approach to determine critical dimensions from scatterometric measurements.  
 Metrologia, 55(6):S201, Dec. 2018.
-
-[5] H. Wu, J. Köhler, and F. Noé.
-Stochastic normalizing flows.
-In Advances in Neural Information Processing Systems, 2020.
