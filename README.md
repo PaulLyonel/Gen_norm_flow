@@ -24,8 +24,7 @@ Arxiv preprint arXiv:2111.12506, 2021.
 
 [2] P. Hagemann, J. Hertrich and G. Steidl.  
 Stochastic Normalizing Flows for Inverse Problems: a Markov Chains Viewpoint.  
-ArXiv preprint arXiv:2109.11375, 2021.  
-Accepted in: SIAM/ASA Journal on Uncertainty Quantification
+SIAM/ASA Journal on Uncertainty Quantification, vol. 10 (3), pp. 1162-1190, 2022.
 
 [3] S. Heidenreich, H. Gross, and M. Bär.  
 Bayesian approach to the statistical inverse problem of scatterometry: Comparison of three surrogate models.  
