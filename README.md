@@ -20,7 +20,8 @@ If you have any questions or bug reports, feel free to contact Paul Hagemann (ha
 
 [1] P. Hagemann, J. Hertrich and G. Steidl.  
 Generalized Normalizing Flows via Markov Chains.  
-Arxiv preprint arXiv:2111.12506, 2021.
+Elements in Non-local Data Interactions: Foundations and Applications.  
+Cambridge University Press, 2023.
 
 [2] P. Hagemann, J. Hertrich and G. Steidl.  
 Stochastic Normalizing Flows for Inverse Problems: a Markov Chains Viewpoint.  
